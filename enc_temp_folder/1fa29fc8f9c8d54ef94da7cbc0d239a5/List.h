@@ -284,15 +284,13 @@ inline int List<T>::getLength() const
 	return m_length;
 }
 
-
-// PATCH THIS
 template<typename T>
 inline void List<T>::setList(List<T> other)
 {
 	Iterator<int> iter = other.begin();
 	while (iter != nullptr)
 	{
-		pushBack(*iter);
+		pushFront(*iter);
 		iter++;
 	}
 	while (m_length > other.getLength())
