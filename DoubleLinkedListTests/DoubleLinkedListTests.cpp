@@ -304,6 +304,7 @@ namespace DoubleLinkedListTest
 			Assert::AreEqual(5, list.getLength());
 		}
 
+		//PATCH THIS
 		TEST_METHOD(SetList)
 		{
 			List<int> list = { 1, 2, 3, 4, 5 };
