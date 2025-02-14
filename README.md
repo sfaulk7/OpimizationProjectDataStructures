@@ -3,6 +3,8 @@ Contains all the data structures used in an optimization project
 <br/>
 Link to release download: 
 <br/>
+https://github.com/sfaulk7/OpimizationProjectDataStructures/releases/tag/v1.0
+<br/>
 
 ### DoubleLinkedList
  A simple DoubleLinkedList with iterators and nodes
