@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{52dc8b09-28bd-4aba-a1d3-ab10663093b4}</ProjectGuid>
+    <ProjectGuid>{E0D58531-80E5-4629-9412-AB841C819843}</ProjectGuid>
     <RootNamespace>DoubleLinkedList</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ProjectName>DataStructures</ProjectName>
