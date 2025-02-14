@@ -1,6 +1,9 @@
 # OptimizationProjectDataStructures
 Contains all the data structures used in an optimization project
 <br/>
+Link to release download: 
+
+<br/>
 ## DoubleLinkedList
  <br/>
  A simple DoubleLinkedList with iterators and nodes
@@ -21,4 +24,3 @@ Also contains all the Tests for the data structures
  A Unit test for the ObjectPool that covers all of the functins that it contains
  <br/>
 
-Link to release download: 
