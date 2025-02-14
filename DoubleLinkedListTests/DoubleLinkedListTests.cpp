@@ -13,6 +13,7 @@ namespace DoubleLinkedListTest
 		TEST_METHOD(DefaultConstructor)
 		{
 			List<int> list;
+			Assert::IsNotNull(&list);
 			Assert::AreEqual(0, list.first());
 			Assert::AreEqual(0, list.last());
 			Assert::AreEqual(0, list.getLength());
@@ -23,6 +24,7 @@ namespace DoubleLinkedListTest
 			List<int> list = { 9, 8, 7, 6, 5 };
 
 			Iterator<int> iter = list.begin();
+			Assert::IsNotNull(&iter);
 			Assert::AreEqual(9, *iter);
 			iter++;
 			Assert::AreEqual(8, *iter);
@@ -101,6 +103,18 @@ namespace DoubleLinkedListTest
 			Assert::AreEqual(4, list.first());
 			Assert::AreEqual(5, list.last());
 			Assert::AreEqual(2, list.getLength());
+
+			list.popFront();
+			// list should now be { 5 }
+			Assert::AreEqual(5, list.first());
+			Assert::AreEqual(5, list.last());
+			Assert::AreEqual(1, list.getLength());
+
+			list.popFront();
+			// list should now be { }
+			Assert::AreEqual(0, list.first());
+			Assert::AreEqual(0, list.last());
+			Assert::AreEqual(0, list.getLength());
 		}
 
 		TEST_METHOD(PopBack)
@@ -123,6 +137,18 @@ namespace DoubleLinkedListTest
 			Assert::AreEqual(1, list.first());
 			Assert::AreEqual(2, list.last());
 			Assert::AreEqual(2, list.getLength());
+
+			list.popBack();
+			// list should now be { 1 }
+			Assert::AreEqual(1, list.first());
+			Assert::AreEqual(1, list.last());
+			Assert::AreEqual(1, list.getLength());
+
+			list.popBack();
+			// list should now be { }
+			Assert::AreEqual(0, list.first());
+			Assert::AreEqual(0, list.last());
+			Assert::AreEqual(0, list.getLength());
 		}
 
 		TEST_METHOD(Insert)
@@ -191,28 +217,98 @@ namespace DoubleLinkedListTest
 
 		TEST_METHOD(Remove)
 		{
+			int count;
 			List<int> list = { 1, 2, 3, 4, 5 };
-			list.remove(3);
+			count = list.remove(3);
 			// list should now be { 1, 2, 4, 5 }
+			Assert::AreEqual(1, count);
 			Assert::AreEqual(1, list.first());
 			Assert::AreEqual(2, *(list.begin()++));
 			Assert::AreEqual(4, *(list.begin()++++));
 			Assert::AreEqual(5, list.last());
 			Assert::AreEqual(4, list.getLength());
 
-			list.remove(4);
+			count = list.remove(4);
 			// list should now be { 1, 2, 5 }
+			Assert::AreEqual(1, count);
 			Assert::AreEqual(1, list.first());
 			Assert::AreEqual(2, *(list.begin()++));
 			Assert::AreEqual(5, list.last());
 			Assert::AreEqual(3, list.getLength());
 
-			List<int> emptylist;
-			emptylist.remove(0);
-			// emptylist should still be { }
-			Assert::AreEqual(0, emptylist.first());
-			Assert::AreEqual(0, emptylist.last());
-			Assert::AreEqual(0, emptylist.getLength());
+			count = list.remove(2);
+			// list should now be { 1, 5 }
+			Assert::AreEqual(1, count);
+			Assert::AreEqual(1, list.first());
+			Assert::AreEqual(5, list.last());
+			Assert::AreEqual(2, list.getLength());
+
+			count = list.remove(1);
+			// list should now be { 5 }
+			Assert::AreEqual(1, count);
+			Assert::AreEqual(5, list.first());
+			Assert::AreEqual(5, list.last());
+			Assert::AreEqual(1, list.getLength());
+
+			count = list.remove(5);
+			// list should now be empty { }
+			Assert::AreEqual(1, count);
+			Assert::AreEqual(0, list.first());
+			Assert::AreEqual(0, list.last());
+			Assert::AreEqual(0, list.getLength());
+
+			count = list.remove(0);
+			// list should still be empty { }
+			Assert::AreEqual(0, count);
+			Assert::AreEqual(0, list.first());
+			Assert::AreEqual(0, list.last());
+			Assert::AreEqual(0, list.getLength());
+
+			//Check that it removes multiple of a value
+			List<int> list2 = { 1, 1, 2, 2, 3, 3, 4, 4, 5, 5};
+			count = list2.remove(3);
+			//list2 should now be { 1, 1, 2, 2, 4, 4, 5, 5 }
+			Assert::AreEqual(2, count);
+			Assert::AreEqual(1, list2.first());
+			Assert::AreEqual(5, list2.last());
+			Assert::AreEqual(8, list2.getLength());
+
+			count = list2.remove(5);
+			//list2 should now be { 1, 1, 2, 2, 4, 4 }
+			Assert::AreEqual(2, count);
+			Assert::AreEqual(1, list2.first());
+			Assert::AreEqual(4, list2.last());
+			Assert::AreEqual(6, list2.getLength());
+
+			count = list2.remove(1);
+			//list2 should now be { 2, 2, 4, 4 }
+			Assert::AreEqual(2, count);
+			Assert::AreEqual(2, list2.first());
+			Assert::AreEqual(4, list2.last());
+			Assert::AreEqual(4, list2.getLength());
+
+			count = list2.remove(4);
+			//list2 should now be { 2, 2 }
+			Assert::AreEqual(2, count);
+			Assert::AreEqual(2, list2.first());
+			Assert::AreEqual(2, list2.last());
+			Assert::AreEqual(2, list2.getLength());
+
+			count = list2.remove(2);
+			//list2 should now be empty { }
+			Assert::AreEqual(2, count);
+			Assert::AreEqual(0, list2.first());
+			Assert::AreEqual(0, list2.last());
+			Assert::AreEqual(0, list2.getLength());
+
+			//Check that it removes ALL of a value
+			List<int> list3 = { 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5 };
+			count = list3.remove(5);
+			//list3 should now be empty { }
+			Assert::AreEqual(13, count);
+			Assert::AreEqual(0, list3.first());
+			Assert::AreEqual(0, list3.last());
+			Assert::AreEqual(0, list3.getLength());
 		}
 
 		TEST_METHOD(First)
@@ -264,23 +360,9 @@ namespace DoubleLinkedListTest
 			List<int> list = { 1, 2, 3, 4, 5 };
 
 			Iterator<int> iter = list.end();
-			Assert::AreEqual(5, *iter);
-			iter--;
-			Assert::AreEqual(4, *iter);
-			iter--;
-			Assert::AreEqual(3, *iter);
-			iter--;
-			Assert::AreEqual(2, *iter);
-			iter--;
-			Assert::AreEqual(1, *iter);
-			iter++;
-			Assert::AreEqual(2, *iter);
-			iter++;
-			Assert::AreEqual(3, *iter);
-			iter++;
-			Assert::AreEqual(4, *iter);
-			iter++;
-			Assert::AreEqual(5, *iter);
+			Iterator<int> iter2 (nullptr);
+
+			Assert::IsTrue(iter2 == iter);
 		}
 
 		TEST_METHOD(Destroy)
@@ -304,30 +386,61 @@ namespace DoubleLinkedListTest
 			Assert::AreEqual(5, list.getLength());
 		}
 
-		//PATCH THIS
-		TEST_METHOD(SetList)
+		TEST_METHOD(UsageCase1)
 		{
-			List<int> list = { 1, 2, 3, 4, 5 };
+			List<int> list;
+			int listCounter = 0;
 
-			List<int> list2 = { 5, 4, 3, 2, 1, };
+			for (int i = 0; i <= 10000; i++)
+			{
+				listCounter++;
+				list.pushFront(i * -1);
+				Assert::AreEqual(i * -1, list.first());
+				Assert::AreEqual(listCounter, list.getLength());
 
-			list.setList(list2);
+				listCounter++;
+				list.pushBack(i);
+				Assert::AreEqual(i, list.last());
+				Assert::AreEqual(listCounter, list.getLength());
+			}
 
-			Assert::AreEqual(5, list.first());
-			Assert::AreEqual(1, list.last());
-			Assert::AreEqual(5, list.getLength());
+			for (int i = 10000; i >= 0; i--)
+			{
+				Assert::AreEqual(i * -1, list.first());
+				Assert::AreEqual(listCounter, list.getLength());
+				listCounter--;
+				list.popFront();
 
-			Iterator<int> iter = list.begin();
-			Assert::AreEqual(5, *iter);
-			iter--;
-			Assert::AreEqual(4, *iter);
-			iter--;
-			Assert::AreEqual(3, *iter);
-			iter--;
-			Assert::AreEqual(2, *iter);
-			iter--;
-			Assert::AreEqual(1, *iter);
+				Assert::AreEqual(i, list.last());
+				Assert::AreEqual(listCounter, list.getLength());
+				listCounter--;
+				list.popBack();
+			}
+
 		}
 
+		TEST_METHOD(UsageCase2)
+		{
+			List<int> list{ 0 };
+			
+
+			for (int i = 0; i < 1000; i++)
+			{
+				Iterator<int> iter = list.begin();
+
+				for (int j = 0; j < list.getLength(); j++)
+				{
+					if (*iter != list.last())
+					{
+						iter++;
+						Assert::AreEqual(j, *iter);
+					}
+				}
+
+				list.pushBack(i);
+
+			}
+
+		}
 	};
 }

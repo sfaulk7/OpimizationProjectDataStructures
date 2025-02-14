@@ -7,8 +7,17 @@ template<typename T>
 class List
 {
 public:
+	//constructor
 	List<T>();
 	List<T>(std::initializer_list<T> list);
+
+	// MAKE Copy constructor
+	List(const List &) = default;
+
+	// MAKE Copy assignment operator
+	List& operator=(const List &) = default;
+
+	//deconstructor
 	~List<T>();
 
 	void pushFront(const T& value);
@@ -17,15 +26,13 @@ public:
 	T popFront();
 	T popBack();
 	bool insert(const T& value, int index);
-	bool remove(const T& value);
+	int remove(const T& value);
 	T first();
 	T last();
 	Iterator<T> begin() const;
 	Iterator<T> end() const;
 	void destroy();
 	int getLength() const;
-
-	void setList(List<T> other);
 
 private:
 	Node<T>* m_head;
@@ -191,43 +198,74 @@ inline bool List<T>::insert(const T& value, int index)
 }
 
 template<typename T>
-inline bool List<T>::remove(const T& value)
+inline int List<T>::remove(const T& value)
 {
+	//If m_tail is null then list is empty
 	if (!m_tail)
-		return false;
+		return 0;
 
-	if (m_head->value == value)
-	{
-		popFront();
-		return true;
-	}
+	int count = 0;
 
-	if (!m_head->next)
-		return false;
+	////If m_head's next is null
+	//if (!m_head->next)
+	//	return false;
 
-	if (m_tail->value == value)
-	{
-		popBack();
-		return true;
-	}
+	////If m_tail is equal to the value
+	//if (m_tail->value == value)
+	//{
+	//	popBack();
+	//	remove(value);
+	//	return true;
+	//}
 
-	if (m_length <= 2)
-		return false;
+	////If the list is only the head and tail
+	//if (m_length <= 2)
+	//	return false;
 
-	Node<T>* node = m_head->next;
-	while (node != m_tail)// Get rid of: m_tail (-> previous) -----------------------------------------------------------------------------------------------------------
+	//Iterate and remove
+	Node<T>* node = m_head;
+	while (node && m_tail && node != m_tail->next)
 	{
 		if (node->value == value)
 		{
-			node->previous->next = node->next;
-			node->next->previous = node->previous;
-			m_length--;
-			node = nullptr;
-			return true;
+			if (node != m_head)
+			{
+				node->previous->next = node->next;
+			}
+			//If m_head is equal to the value
+			else
+			{
+				popFront();
+				node = m_head;
+				count++;
+				//If removed head theres no need to check tail so run next iteration of while loop
+				continue;
+			}
+
+			if (node != m_tail)
+			{
+				node->next->previous = node->previous;
+				Node<T>* temp = node;
+				node = node->next;
+				delete temp;
+
+				m_length--;
+				count++;
+			}
+			//If m_tail is equal to the value
+			else
+			{
+				popBack();
+				node = m_tail;
+				count++;
+			}
 		}
-		node = node->next;
+		else
+		{
+			node = node->next;
+		}
 	}
-	return false;
+	return count;
 }
 
 template<typename T>
@@ -259,7 +297,7 @@ inline Iterator<T> List<T>::end() const
 {
 	if (!m_tail)
 		return Iterator<T>();
-	return Iterator<T>(m_tail);
+	return Iterator<T>(m_tail->next);
 }
 
 template<typename T>
@@ -282,23 +320,4 @@ template<typename T>
 inline int List<T>::getLength() const
 {
 	return m_length;
-}
-
-
-// PATCH THIS
-template<typename T>
-inline void List<T>::setList(List<T> other)
-{
-	Iterator<int> iter = other.begin();
-	while (iter != nullptr)
-	{
-		pushBack(*iter);
-		iter++;
-	}
-	while (m_length > other.getLength())
-	{
-		popBack();
-	}
-
-	return;
 }
