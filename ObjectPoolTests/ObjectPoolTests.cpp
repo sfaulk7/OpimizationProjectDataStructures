@@ -139,5 +139,103 @@ namespace ObjectPoolTests
 			Assert::AreEqual(0, Pool1.InactiveListCount());
 		}
 
+		TEST_METHOD(ActiveListCount)
+		{
+			ObjectPool<int> Pool1;
+			Assert::IsNotNull(&Pool1);
+
+			int x = 5;
+			int y = 7;
+			int z = 3;
+			int w = 4;
+			Pool1.AddToPool(x, 0);
+			Pool1.AddToPool(y, 0);
+			Pool1.AddToPool(z, 0);
+			Pool1.AddToPool(w, 0);
+
+			Assert::AreEqual(4, Pool1.ActiveListCount());
+
+			int a = 0;
+			int b = 1;
+			int c = 2;
+			int d = 3;
+			Pool1.AddToPool(a, 0);
+			Pool1.AddToPool(b, 0);
+			Pool1.AddToPool(c, 0);
+			Pool1.AddToPool(d, 0);
+
+			Assert::AreEqual(8, Pool1.ActiveListCount());
+
+			Pool1.SetInactive(x);
+			Pool1.SetInactive(y);
+			Pool1.SetInactive(z);
+			Pool1.SetInactive(w);
+
+			Assert::AreEqual(4, Pool1.ActiveListCount());
+		
+			Pool1.SetInactive(a);
+			Pool1.SetInactive(b);
+			Pool1.SetInactive(c);
+			Pool1.SetInactive(d);
+
+			Assert::AreEqual(0, Pool1.ActiveListCount());
+		}
+
+		TEST_METHOD(InactiveListCount)
+		{
+			ObjectPool<int> Pool1;
+			Assert::IsNotNull(&Pool1);
+
+			int x = 5;
+			int y = 7;
+			int z = 3;
+			int w = 4;
+			Pool1.AddToPool(x, 0);
+			Pool1.AddToPool(y, 0);
+			Pool1.AddToPool(z, 0);
+			Pool1.AddToPool(w, 0);
+
+			Assert::AreEqual(0, Pool1.InactiveListCount());
+
+			int a = 0;
+			int b = 1;
+			int c = 2;
+			int d = 3;
+			Pool1.AddToPool(a, 0);
+			Pool1.AddToPool(b, 0);
+			Pool1.AddToPool(c, 0);
+			Pool1.AddToPool(d, 0);
+
+			Assert::AreEqual(0, Pool1.InactiveListCount());
+
+			Pool1.SetInactive(x);
+			Pool1.SetInactive(y);
+			Pool1.SetInactive(z);
+			Pool1.SetInactive(w);
+
+			Assert::AreEqual(4, Pool1.InactiveListCount());
+
+			Pool1.SetInactive(a);
+			Pool1.SetInactive(b);
+			Pool1.SetInactive(c);
+			Pool1.SetInactive(d);
+
+			Assert::AreEqual(8, Pool1.InactiveListCount());
+
+			Pool1.Activate(x);
+			Pool1.Activate(y);
+			Pool1.Activate(z);
+			Pool1.Activate(w);
+
+			Assert::AreEqual(4, Pool1.InactiveListCount());
+
+			Pool1.Activate(a);
+			Pool1.Activate(b);
+			Pool1.Activate(c);
+			Pool1.Activate(d);
+
+			Assert::AreEqual(0, Pool1.InactiveListCount());
+		}
+
 	};
 }
