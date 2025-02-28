@@ -1,5 +1,6 @@
 #pragma once
 #include "List.h"
+#include <iostream>
 
 template<typename T>
 class ObjectPool
@@ -7,13 +8,16 @@ class ObjectPool
 public:
 	ObjectPool<T>();
 
-	void AddToPool(T& value);
 	void AddToPool(T& value, int index);
 	void SetInactive(T& value);
 	void Activate(int index);
 
-	List<T*> ActiveList;
-	List<T*> InactiveList;
+	int ActiveListCount();
+	int InactiveListCount();
+
+private:
+	List<T*> m_activeList;
+	List<T*> m_inactiveList;
 
 };
 
@@ -24,27 +28,34 @@ inline ObjectPool<T>::ObjectPool()
 }
 
 template<typename T>
-inline void ObjectPool<T>::AddToPool(T& value)
-{
-	ActiveList.pushBack(&value);
-}
-
-template<typename T>
 inline void ObjectPool<T>::AddToPool(T& value, int index)
 {
-	ActiveList.insert(&value, index);
+	m_activeList.insert(&value, index);
 }
 
 template<typename T>
 inline void ObjectPool<T>::SetInactive(T& value)
 {
-	InactiveList.pushBack(&value);
-	ActiveList.remove(&value);
+	m_inactiveList.pushBack(&value);
+	m_activeList.remove(&value);
 }
 
-//Puts the first object in the InactiveList into the index specified in ActiveList
 template<typename T>
 inline void ObjectPool<T>::Activate(int index)
 {
-	ActiveList.insert(InactiveList.popFront(), index);
+	m_activeList.insert(m_inactiveList.popFront(), index);
+
 }
+
+template<typename T>
+inline int ObjectPool<T>::ActiveListCount()
+{
+	return m_activeList.getLength();
+}
+
+template<typename T>
+inline int ObjectPool<T>::InactiveListCount()
+{
+	return m_inactiveList.getLength();
+}
+

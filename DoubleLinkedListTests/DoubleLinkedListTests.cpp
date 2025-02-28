@@ -386,7 +386,7 @@ namespace DoubleLinkedListTest
 			Assert::AreEqual(5, list.getLength());
 		}
 
-		TEST_METHOD(UsageCase1)
+		TEST_METHOD(StressUsageCase1)
 		{
 			List<int> list;
 			int listCounter = 0;
@@ -419,7 +419,7 @@ namespace DoubleLinkedListTest
 
 		}
 
-		TEST_METHOD(UsageCase2)
+		TEST_METHOD(StressUsageCase2)
 		{
 			List<int> list{ 0 };
 			
